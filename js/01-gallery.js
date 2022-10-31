@@ -1,10 +1,7 @@
 import { galleryItems } from "./gallery-items.js";
 // Change code below this line
 
-console.log(galleryItems);
-
 const gallaryListRef = document.querySelector(".gallery");
-gallaryListRef.addEventListener("click", onOpenModalImg);
 
 const markup = galleryItems
   .map(
@@ -23,23 +20,30 @@ const markup = galleryItems
 
 gallaryListRef.insertAdjacentHTML("afterbegin", markup);
 
-let instance = "";
-function onOpenModalImg(event) {
+gallaryListRef.addEventListener("click", onClickImage);
+// let instance = "";
+function onClickImage(event) {
   event.preventDefault();
-  const url = event.target.dataset.source;
   if (event.target.nodeName !== "IMG") {
     return;
   }
-  instance = basicLightbox.create(`
-	 <img src="${url}"/>
-`);
+  const instance = basicLightbox.create(
+    `<img src="${event.target.dataset.source}"
+   alt='${event.target.alt}'/>`,
+    {
+      onShow: (instance) => {
+        gallaryListRef.addEventListener("keydown", onGalleryKeydown);
+      },
+      onClose: (instance) => {
+        gallaryListRef.removeEventListener("keydown", onGalleryKeydown);
+      },
+    }
+  );
   instance.show();
-  document.addEventListener("keydown", onCloseModalWindow);
-}
 
-function onCloseModalWindow(event) {
-  if (event.code !== "Escape") {
-    return;
+  function onGalleryKeydown(event) {
+    if (event.code === "Escape") {
+      instance.close();
+    }
   }
-  instance.close();
 }

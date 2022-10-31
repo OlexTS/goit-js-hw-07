@@ -1,8 +1,6 @@
 import { galleryItems } from "./gallery-items.js";
 // Change code below this line
 
-console.log(galleryItems);
-
 const gallaryListRef = document.querySelector(".gallery");
 
 const markup = galleryItems
@@ -11,9 +9,9 @@ const markup = galleryItems
       preview,
       original,
       description,
-    }) => `<a class="gallery__item" href="${original}">
+    }) => `<li class="gallery__item"><a class="gallery__link" href="${original}">
   <img class="gallery__image" src="${preview}" alt="${description}" />
-</a>`
+</a></li>`
   )
   .join("");
 
@@ -21,6 +19,5 @@ gallaryListRef.insertAdjacentHTML("afterbegin", markup);
 
 const lightbox = new SimpleLightbox(".gallery a", {
   captionsData: "alt",
-  captionPosition: "bottom",
   captionDelay: 250,
 });
